@@ -7,16 +7,21 @@
 </template>
 
 <script setup>
+import { watch } from 'vue';
 import { useRoute } from 'vue-router';
 import useResource from '../composables/useResource';
 
 const route = useRoute();
 
 // Post
-const { item: post, fetchOne: fetchPost } = useResource('posts')
+const { item: post, fetchOne: fetchPost } = useResource('posts');
 fetchPost(route.params.id);
 
 // User
 const { item: user, fetchOne: fetchUser } = useResource('users');
-fetchUser(1);
+
+watch(
+  () => ({ ...post.value }),
+  () => fetchUser(post.value.userId)
+);
 </script>
